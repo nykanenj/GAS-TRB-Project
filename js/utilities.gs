@@ -31,6 +31,14 @@ const arrayToHashmap = array =>
     return acc;
 }, {});
 
+function showPopup(title, fileName, fileUrl, folderName, folderUrl) {
+  const html = '<html><body><div>' + 'Tiedosto: ' + '</div><a href="' + fileUrl + '" target="blank">'+fileName+'</a><br><br>' + 
+  '<div>' + 'Kansio: ' + '</div><a href="' + folderUrl + '" target="blank">'+folderName+'</a></body></html>';
+  Logger.log('html: '+ html);
+  var ui = HtmlService.createHtmlOutput(html);
+  SpreadsheetApp.getUi().showModelessDialog(ui, title);
+}
+  
 /* Function not needed
 const arrayToObject = (array, keyField) =>
   array.reduce((obj, item) => {

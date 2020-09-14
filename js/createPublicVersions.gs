@@ -1,60 +1,91 @@
 const createPublicVersionNoSuppliers = () => {
-  createPublicVersion(false);
+  createPublicVersion(showSuppliers = false);
 }
 
 const createPublicVersion = (showSuppliers = true) => {
   
-  Logger.log('Running createPublicVersion');
+  Logger.log('User ' + User.getEmail() + 'running createPublicVersion');
   const activeSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
   const sourceSheet = activeSpreadSheet.getSheetByName(enums.SHEETS.KALUSTESUUNNITELMA);
 if (!sourceSheet) {
-  showError('Virhe', 'KALUSTESUUNNITELMA -välilehti puuttuu!')
+  showError('Virhe', 'KALUSTESUUNNITELMA -välilehti puuttuu!');
   return;
 }
   
   
   const publicVersionsFolderID = activeSpreadSheet.getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID).getValue();
 if (!publicVersionsFolderID || publicVersionsFolderID == '') {
-  showError('Julkisen version kansio puuttuu','Julkisen version kansio määrittely puuttuu config -välilehdeltä!')
+  showError('Julkisen version kansio puuttuu','Julkisen version kansio määrittely puuttuu config -välilehdeltä!');
   return;
 }
   
   const fileNameText = showSuppliers ? 'Julkinen-Versio-Päämiehet' : 'Julkinen-Versio';
   const fileName = createFileName(fileNameText);
+  Logger.log('Creating file: ' + fileName);
   
-  const newFile = SpreadsheetApp.create(fileName) 
-  const newFileID = newFile.getId();
+  const newSpreadsheet = SpreadsheetApp.create(fileName); 
+  const newFile = DriveApp.getFileById(newSpreadsheet.getId()); 
+  const publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
+  Logger.log('Moving file ' + fileName + ' to folderName: ' + publicFolder.getName() + ', folderID:' + publicVersionsFolderID);
+  newFile.moveTo(publicFolder);
   
-  // ----
-  //Place newFile in correct folder. Not working
-  Logger.log('folderId ' + publicVersionsFolderID);
-  const folderName = DriveApp.getFolderById(publicVersionsFolderID).getName();
-  Logger.log('folderName: ' + folderName);
-  DriveApp.getFolderById(publicVersionsFolderID).addFile(newFile); // <- This line or next line is probably causing the error. Is it an error because 'DriveApp' is being used, does app scope need to be larger?
-  //DriveApp.getRootFolder().removeFile(newFile); //Removes reference from root
-  
-  /*
-  //if (templateFolderID != '') DriveApp.getFolderById(templateFolderID).removeFile(newFile); // Remove file from template folder
-  const newSpreadSheet = SpreadsheetApp.openById(newFileID);
-  */
-  // ----
-  
-  const newSheet = sourceSheet.copyTo(newFile);
+  Logger.log('Moving values...');
+  const newSheet = sourceSheet.copyTo(newSpreadsheet);
   newSheet.setName(enums.SHEETS.KALUSTESUUNNITELMA);
+  const sheet1 = newSpreadsheet.getSheetByName('Sheet1');
+  newSpreadsheet.deleteSheet(sheet1);
+  
+  SpreadsheetApp.flush();
+  newSheet.getDataRange().copyTo(newSheet.getRange('A1'), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
   const lastColumn = newSheet.getLastColumn();
-  
-  //TODO: Copy paste all sheet contents as values.
-  
   const headingRowArray = newSheet.getRange(1, 1, 1, lastColumn).getValues().join().split(',');
   Logger.log('headingRowArray: ' + headingRowArray);
-  Logger.log('lastColumn: '+ lastColumn);
   const headingHashmap = arrayToHashmap(headingRowArray);
-  Logger.log('headingHashMap: ' + JSON.stringify(headingHashMap));
+  Logger.log('headingHashmap: ' + JSON.stringify(headingHashmap));
+  Logger.log('Deleting columns...');
   const firstDeleteCol = headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Toimittaja];
   const rowsToDelete = lastColumn - firstDeleteCol + 1;
   newSheet.deleteColumns(firstDeleteCol, rowsToDelete);
   if (!showSuppliers) {
     newSheet.deleteColumn(headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Valmistaja]);
   }
+
+  showPopup("Makro 'Luo Julkinen Versio' ajettu", fileName, newSpreadsheet.getUrl(), publicFolder.getName(), publicFolder.getUrl());
+
+}
+
+
+
+
+
+const createPublicVersionByCategories = () => {
+  Logger.log('User ' + User.getEmail() + 'running createPublicVersionByCategories');
+  const activeSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sourceSheet = activeSpreadSheet.getSheetByName(enums.SHEETS.KALUSTESUUNNITELMA);
+if (!sourceSheet) {
+  showError('Virhe', 'KALUSTESUUNNITELMA -välilehti puuttuu!');
+  return;
+}
+  const publicVersionsFolderID = activeSpreadSheet.getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID).getValue();
+if (!publicVersionsFolderID || publicVersionsFolderID == '') {
+  showError('Julkisen version kansio puuttuu','Julkisen version kansio määrittely puuttuu config -välilehdeltä!');
+  return;
+}
+  
+  const fileName = createFileName('Julkinen-Versio-Kategorioittain');
+  Logger.log('Creating file: ' + fileName);
+  const newSpreadsheet = SpreadsheetApp.create(fileName); 
+  const newFile = DriveApp.getFileById(newSpreadsheet.getId()); 
+  const publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
+  Logger.log('Moving file ' + fileName + ' to folderName: ' + publicFolder.getName() + ', folderID:' + publicVersionsFolderID);
+  newFile.moveTo(publicFolder);
+ 
+  const headingRowArray = sourceSheet.getRange(1, 1, 1, lastColumn).getValues().join().split(',');
+  Logger.log('headingRowArray: ' + headingRowArray);
+  const headingHashmap = arrayToHashmap(headingRowArray);
+  Logger.log('headingHashmap: ' + JSON.stringify(headingHashmap));
+  
+  Logger.log('Moving values...');
+  
 }
 
