@@ -6,3 +6,11 @@ const showError = (title, message) => {
      ui.ButtonSet.OK);
 }
 
+const checkSheetExists = (sheetName) => {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  if (!sheet) {
+    Browser.msgBox('Virhe: Välilehti ' + sheetName +  ' puuttuu');
+    return undefined;
+  }
+  return sheet;
+}

@@ -1,9 +1,7 @@
 const addRow = () => {
-  var sh = ss.getSheetByName(enums.SHEETS.KALUSTESUUNNITELMA);
-  if (!sh) {
-    Browser.msgBox('Virhe: Välilehti ' + enums.SHEETS.KALUSTESUUNNITELMA +  ' puuttuu');
-    return;
-  }
+  const sh = checkSheetExists(enums.SHEETS.KALUSTESUUNNITELMA);
+  if (!sh) return;
+  
   sh.activate();
   lRow = sh.getLastRow(); 
   var lCol = sh.getLastColumn()
@@ -30,8 +28,39 @@ const arrayToHashmap = array =>
     acc[val] = index + 1
     return acc;
 }, {});
+  
+const trbArrayToHashMap = (rawTrbArray) => {
 
-function showPopup(title, fileName, fileUrl, folderName, folderUrl) {
+  trbArray = [].concat(...rawTrbArray).map(e => (!e || e === '') ? 'Kategorisoimaton' : e ); 
+  Logger.log('TRB column: ' + trbArray);
+ 
+  let previousVal = trbArray[0].toString();
+  Logger.log(previousVal);
+  let trbHashMap = {
+    [previousVal]: { 
+      'start': 2,
+    },
+  };
+  let i = 0
+  for (; i < trbArray.length; i++) {
+    currentVal = trbArray[i].toString();
+    if (currentVal !== previousVal) {
+      trbHashMap[previousVal]['end'] = i + 1;
+      trbHashMap[previousVal]['count'] = trbHashMap[previousVal]['end'] - trbHashMap[previousVal]['start'] + 1
+      trbHashMap[currentVal] = {
+        'start': i + 2,
+      };
+      previousVal = currentVal;
+    }
+  }
+  trbHashMap[previousVal]['end'] = i + 1;
+  trbHashMap[previousVal]['count'] = trbHashMap[previousVal]['end'] - trbHashMap[previousVal]['start'] + 1
+  Logger.log('trbHashMap' + JSON.stringify(trbHashMap));  
+
+  return trbHashMap;
+}
+
+const showPopup = (title, fileName, fileUrl, folderName, folderUrl) => {
   const html = '<html><body><div>' + 'Tiedosto: ' + '</div><a href="' + fileUrl + '" target="blank">'+fileName+'</a><br><br>' + 
   '<div>' + 'Kansio: ' + '</div><a href="' + folderUrl + '" target="blank">'+folderName+'</a></body></html>';
   Logger.log('html: '+ html);
