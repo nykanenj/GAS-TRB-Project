@@ -49,20 +49,36 @@ const fetchSpaceQuantityConsts = () => {
   return consts;  
 };
 
-const insertColumnAndFormulas = (sheetObject, newColumnName, rowNum = 1) => {
+const insertColumnAndFormulas = (sheetObject, newColumnName = 'temp', headingRow = 1) => {
   //sheetObjects are the kalustesuunnitelma and asennuslista sub-objects in consts above 
   
   Logger.log('Inserting new space-quantity column to sheet ' + sheetObject.sheet + ' after column number ' + sheetObject.lastColIndex);
   sheetObject.sheet.insertColumnAfter(sheetObject.lastColIndex);
-  sheetObject.sheet.getRange(rowNum, sheetObject.lastColIndex + 1).setValue(newColumnName);
+  sheetObject.sheet.getRange(headingRow, sheetObject.lastColIndex + 1).setValue(newColumnName);
   
   const newFormula = '=SUM(' +
-  sheetObject.sheet.getRange(rowNum + 1, sheetObject.headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Maara_tila_1]).getA1Notation() + ':' +
-  sheetObject.sheet.getRange(rowNum + 1, sheetObject.lastColIndex + 1).getA1Notation() + ')'; // e.g.'=SUM(K2:M2)';
+  sheetObject.sheet.getRange(headingRow + 1, sheetObject.headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Maara_tila_1]).getA1Notation() + ':' +
+  sheetObject.sheet.getRange(headingRow + 1, sheetObject.lastColIndex + 1).getA1Notation() + ')'; // e.g.'=SUM(K2:M2)';
   const maaraYhtCol = sheetObject.headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Maara_yht]
-  const firstFormulaCell = sheetObject.sheet.getRange(rowNum + 1, maaraYhtCol) 
+  const firstFormulaCell = sheetObject.sheet.getRange(headingRow + 1, maaraYhtCol) 
   firstFormulaCell.setFormula(newFormula);
-  firstFormulaCell.copyTo(sheetObject.sheet.getRange(rowNum + 2, maaraYhtCol, sheetObject.lastRow)); //Copy Down formula
-  sheetObject.lastColumnIndexRange.setValue(sheetObject.lastColIndex + 1); //Update config sheet
+  firstFormulaCell.copyTo(sheetObject.sheet.getRange(headingRow + 2, maaraYhtCol, sheetObject.lastRow)); //Copy Down formula
+  sheetObject.lastColumnIndexRange.setValue(sheetObject.lastColIndex + 1); //Update config sheet 
+};
   
-}
+const deleteColumnUpdateFormula = (sheetObject, headingRow = 1) => {
+  
+  Logger.log('Deleting last space-quantity column on sheet' + sheetObject.sheet + '. Position ' + sheetObject.lastColIndex);
+  sheetObject.sheet.deleteColumn(sheetObject.lastColIndex);
+  
+  const newFormula = '=SUM(' +
+  sheetObject.sheet.getRange(headingRow + 1, sheetObject.headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Maara_tila_1]).getA1Notation() + ':' +
+  sheetObject.sheet.getRange(headingRow + 1, sheetObject.lastColIndex - 1).getA1Notation() + ')'; // e.g.'=SUM(K2:M2)';
+  const maaraYhtCol = sheetObject.headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Maara_yht];
+  const firstFormulaCell = sheetObject.sheet.getRange(headingRow + 1, maaraYhtCol); 
+  firstFormulaCell.setFormula(newFormula);
+  firstFormulaCell.copyTo(sheetObject.sheet.getRange(headingRow + 2, maaraYhtCol, sheetObject.lastRow)); //Copy Down formula
+  
+  sheetObject.lastColumnIndexRange.setValue(sheetObject.lastColIndex - 1);
+};
+  

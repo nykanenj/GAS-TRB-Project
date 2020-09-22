@@ -9,7 +9,7 @@ const onOpen = (e) => {
   ui = SpreadsheetApp.getUi();
   let menu = ui.createAddonMenu();
   if (env === 'dev') {
-    menu.addItem('Lisää "Määrä tila" -sarake', 'addSpaceQuantityColumn');
+    menu.addItem('Päivitä asennuslista', 'updateInstallationList');
     menu.addItem('Test', 'test');
     menu.addItem('Initialize', 'initialize');
     menu.addSeparator();
@@ -23,6 +23,9 @@ const onOpen = (e) => {
   menu.addSubMenu(ui.createMenu('Määrä-tila')
     .addItem('Lisää "Määrä tila" -sarake', 'addSpaceQuantityColumn')
     .addItem('Poista "Määrä tila" -sarake', 'removeSpaceQuantityColumn'));
+  menu.addSeparator();
+  menu.addSubMenu(ui.createMenu('Asennuslista')
+    .addItem('Päivitä asennuslista', 'updateInstallationList'));
   menu.addToUi();
 }
 
