@@ -21,9 +21,16 @@ const enums = {
     spaceQuantityColumnCount: 'spaceQuantityColumnCount', // enums.NAMEDRANGES.spaceQuantityColumnCount
     spaceQuantityColumnNames: 'spaceQuantityColumnNames', // enums.NAMEDRANGES.spaceQuantityColumnNames
     spaceQuantityFirstColumnName: 'spaceQuantityFirstColumnName', // enums.NAMEDRANGES.spaceQuantityFirstColumnName
-    spaceQuantytyFirstColumnIndex: 'spaceQuantytyFirstColumnIndex', // enums.NAMEDRANGES.spaceQuantytyFirstColumnIndex
     spaceQuantityLastColumnName: 'spaceQuantityLastColumnName', // enums.NAMEDRANGES.spaceQuantityLastColumnName
-    spaceQuantityLastColumnIndex: 'spaceQuantityLastColumnIndex', // enums.NAMEDRANGES.spaceQuantityLastColumnIndex
+    KALUSTESUUNNITELMA: {
+      spaceQuantytyFirstColumnIndex: 'KALUSTESUUNNITELMA.spaceQuantytyFirstColumnIndex', // enums.NAMEDRANGES.spaceQuantytyFirstColumnIndex
+      spaceQuantityLastColumnIndex: 'KALUSTESUUNNITELMA.spaceQuantityLastColumnIndex', // enums.NAMEDRANGES.spaceQuantityLastColumnIndex
+    },
+    ASENNUSLISTA: {
+      spaceQuantytyFirstColumnIndex: 'ASENNUSLISTA.spaceQuantytyFirstColumnIndex', // enums.NAMEDRANGES.spaceQuantytyFirstColumnIndex
+      spaceQuantityLastColumnIndex: 'ASENNUSLISTA.spaceQuantityLastColumnIndex', // enums.NAMEDRANGES.spaceQuantityLastColumnIndex
+    },
+    
   },
   // enums.HEADINGS.KALUSTESUUNNITELMA.ID
   HEADINGS:{
@@ -95,4 +102,7 @@ const enums = {
       
     },
   },
+  //BlaBla: {
+  //   
+  //}
 }
