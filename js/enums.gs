@@ -40,66 +40,63 @@ const enums = {
       Positio: 'Positio', // enums.HEADINGS.KALUSTESUUNNITELMA.Positio
       Tuote: 'Tuote', // enums.HEADINGS.KALUSTESUUNNITELMA.Tuote
       Kesken: 'Kesken', // enums.HEADINGS.KALUSTESUUNNITELMA.Kesken
-      Tuotteen_lisatiedot: 'Tuotteen lisätiedot', // enums.HEADINGS.KALUSTESUUNNITELMA.Tuotteen lisätiedot
-      Maara_yht: 'Määrä yht.', // enums.HEADINGS.KALUSTESUUNNITELMA.Määrä yht.
+      Tuotteen_lisatiedot: 'Tuotteen lisätiedot', // enums.HEADINGS.KALUSTESUUNNITELMA.Tuotteen_lisatiedot
+      Maara_yht: 'Määrä yht.', // enums.HEADINGS.KALUSTESUUNNITELMA.Maara_yht
       Valmistaja: 'Valmistaja', // enums.HEADINGS.KALUSTESUUNNITELMA.Valmistaja
       Kommentti: 'Kommentti', // enums.HEADINGS.KALUSTESUUNNITELMA.Kommentti
       Kuva: 'Kuva', // enums.HEADINGS.KALUSTESUUNNITELMA.Kuva
-      Maara_tila_1: 'Määrä tila 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Määrä tila 1
-      Lisa_tilaus: 'Lisä tilaus', // enums.HEADINGS.KALUSTESUUNNITELMA.Lisä tilaus
+      Maara_tila_1: 'Määrä tila 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Maara_tila_1
+      Lisa_tilaus: 'Lisä-tilaus', // enums.HEADINGS.KALUSTESUUNNITELMA.Lisa_tilaus
       Myyntihinta: 'Myyntihinta', // enums.HEADINGS.KALUSTESUUNNITELMA.Myyntihinta
-      Myyntihinta_yhteensa: 'Myyntihinta yhteensä', // enums.HEADINGS.KALUSTESUUNNITELMA.Myyntihinta yhteensä
+      Myyntihinta_yhteensa: 'Myyntihinta yhteensä', // enums.HEADINGS.KALUSTESUUNNITELMA.Myyntihinta_yhteensa
       Toimittaja: 'Toimittaja', // enums.HEADINGS.KALUSTESUUNNITELMA.Toimittaja
-      Tilaus_pvm: 'Tilaus pvm', // enums.HEADINGS.KALUSTESUUNNITELMA.Tilaus pvm
-      Hankinta_lupa: 'Hankinta-lupa', // enums.HEADINGS.KALUSTESUUNNITELMA.Hankinta-lupa
+      Tilaus_pvm: 'Tilaus pvm', // enums.HEADINGS.KALUSTESUUNNITELMA.Tilaus_pvm
+      Hankinta_lupa: 'Hankinta-lupa', // enums.HEADINGS.KALUSTESUUNNITELMA.Hankinta_lupa
       Ostotilausnumero: 'Ostotilausnumero', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostotilausnumero
-      Vahvistettu_toimituspaiva_tehtaalta: 'Vahvistettu toimituspäivä tehtaalta', // enums.HEADINGS.KALUSTESUUNNITELMA.Vahvistettu toimituspäivä tehtaalta
-      Toimitus_paiva_asiakkaalle: 'Toimitus-päivä asiakkaalle', // enums.HEADINGS.KALUSTESUUNNITELMA.Toimitus-päivä asiakkaalle
-      Saapunut_varastoon: 'Saapunut varastoon', // enums.HEADINGS.KALUSTESUUNNITELMA.Saapunut varastoon
+      Vahvistettu_toimituspaiva_tehtaalta: 'Vahvistettu toimituspäivä tehtaalta', // enums.HEADINGS.KALUSTESUUNNITELMA.Vahvistettu_toimituspaiva_tehtaalta
+      Toimitus_paiva_asiakkaalle: 'Toimitus-päivä asiakkaalle', // enums.HEADINGS.KALUSTESUUNNITELMA.Toimitus_paiva_asiakkaalle
+      Saapunut_varastoon: 'Saapunut varastoon', // enums.HEADINGS.KALUSTESUUNNITELMA.Saapunut_varastoon
       Toimitettu: 'Toimitettu', // enums.HEADINGS.KALUSTESUUNNITELMA.Toimitettu
-      Paamieshinta_kpl: 'Päämieshinta kpl', // enums.HEADINGS.KALUSTESUUNNITELMA.Päämieshinta kpl
-      NETTO_paamieshinto: 'NETTO päämieshinta', // enums.HEADINGS.KALUSTESUUNNITELMA.NETTO päämieshinta
-      Tehtaan_alennus: 'Tehtaan alennus', // enums.HEADINGS.KALUSTESUUNNITELMA.Tehtaan alennus
-      Tehtaan_alennus2: 'Tehtaan alennus2', // enums.HEADINGS.KALUSTESUUNNITELMA.Tehtaan alennus2
-      Tehtaan_alennus3: 'Tehtaan alennus3', // enums.HEADINGS.KALUSTESUUNNITELMA.Tehtaan alennus3
-      Ostorahti_pros: 'Ostorahti %', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostorahti %
-      Ostorahti_eur: 'Ostorahti €', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostorahti €
-      Ostorahdin_vakuutus: 'Ostorahdin vakuutus', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostorahdin vakuutus
-      Rahti_eur: 'Rahti €', // enums.HEADINGS.KALUSTESUUNNITELMA.Rahti €
-      Lisakulu: 'Lisäkulu', // enums.HEADINGS.KALUSTESUUNNITELMA.Lisäkulu
+      Paamieshinta_kpl: 'Päämieshinta kpl', // enums.HEADINGS.KALUSTESUUNNITELMA.Paamieshinta_kpl
+      NETTO_paamieshinto: 'NETTO päämieshinta', // enums.HEADINGS.KALUSTESUUNNITELMA.NETTO_paamieshinto
+      Tehtaan_alennus: 'Tehtaan alennus', // enums.HEADINGS.KALUSTESUUNNITELMA.Tehtaan_alennus
+      Tehtaan_alennus2: 'Tehtaan alennus2', // enums.HEADINGS.KALUSTESUUNNITELMA.Tehtaan_alennus2
+      Tehtaan_alennus3: 'Tehtaan alennus3', // enums.HEADINGS.KALUSTESUUNNITELMA.Tehtaan_alennus3
+      Ostorahti_pros: 'Ostorahti %', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostorahti_pros
+      Ostorahti_eur: 'Ostorahti €', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostorahti_eur
+      Ostorahdin_vakuutus: 'Ostorahdin vakuutus', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostorahdin_vakuutus
+      Rahti_eur: 'Rahti €', // enums.HEADINGS.KALUSTESUUNNITELMA.Rahti_eur
+      Lisakulu: 'Lisäkulu', // enums.HEADINGS.KALUSTESUUNNITELMA.Lisakulu
       Ostohinta: 'Ostohinta', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostohinta
       Myyntikate: 'Myyntikate', // enums.HEADINGS.KALUSTESUUNNITELMA.Myyntikate
-      Valityskate: 'Välityskate', // enums.HEADINGS.KALUSTESUUNNITELMA.Välityskate
-      Ostohinta_yhteensa: 'Ostohinta yhteensä', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostohinta yhteensä
+      Valityskate: 'Välityskate', // enums.HEADINGS.KALUSTESUUNNITELMA.Valityskate
+      Ostohinta_yhteensa: 'Ostohinta yhteensä', // enums.HEADINGS.KALUSTESUUNNITELMA.Ostohinta_yhteensa
       Varastokulu: 'Varastokulu', // enums.HEADINGS.KALUSTESUUNNITELMA.Varastokulu
-      Myyntirahdin_vakuutus: 'Myyntirahdin vakuutus', // enums.HEADINGS.KALUSTESUUNNITELMA.Myyntirahdin vakuutus
+      Myyntirahdin_vakuutus: 'Myyntirahdin vakuutus', // enums.HEADINGS.KALUSTESUUNNITELMA.Myyntirahdin_vakuutus
       Haalaus: 'Haalaus', // enums.HEADINGS.KALUSTESUUNNITELMA.Haalaus
       Asennus: 'Asennus', // enums.HEADINGS.KALUSTESUUNNITELMA.Asennus
       Ompelu: 'Ompelu', // enums.HEADINGS.KALUSTESUUNNITELMA.Ompelu
       Verhoilu: 'Verhoilu', // enums.HEADINGS.KALUSTESUUNNITELMA.Verhoilu
       Erikoiskuljetus: 'Erikoiskuljetus', // enums.HEADINGS.KALUSTESUUNNITELMA.Erikoiskuljetus
-      Lisatyot: 'Lisätyöt', // enums.HEADINGS.KALUSTESUUNNITELMA.Lisätyöt
-      Paamies_laskunnro_1: 'Päämies laskunnro 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Päämies laskunnro 1
-      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun tai rivin summa 1
-      Erapaiva_lasku_1: 'Eräpäivä lasku 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Eräpäivä lasku 1
-      Maksettu_lasku_1: 'Maksettu lasku 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu lasku 1
-      Paamies_laskunnro_1: 'Päämies laskunnro 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Päämies laskunnro 2
-      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun tai rivin summa 2
-      Erapaiva_lasku_1: 'Eräpäivä lasku 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Eräpäivä lasku 2
-      Maksettu_lasku_1: 'Maksettu lasku 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu lasku 2
-      Paamies_laskunnro_1: 'Päämies laskunnro 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Päämies laskunnro 3
-      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun tai rivin summa 3
-      Erapaiva_lasku_1: 'Eräpäivä lasku 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Eräpäivä lasku 3
-      Maksettu_lasku_1: 'Maksettu lasku 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu lasku 3
-      Paamies_laskunnro_1: 'Päämies laskunnro 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Päämies laskunnro 4
-      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun tai rivin summa 4
-      Erapaiva_lasku_1: 'Eräpäivä lasku 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Eräpäivä lasku 4
-      Maksettu_lasku_1: 'Maksettu lasku 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu lasku 4
+      Lisatyot: 'Lisätyöt', // enums.HEADINGS.KALUSTESUUNNITELMA.Lisatyot
+      Paamies_laskunnro_1: 'Päämies laskunnro 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Paamies_laskunnro_1
+      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun_tai_rivin_summa_1
+      Erapaiva_lasku_1: 'Eräpäivä lasku 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Erapaiva_lasku_1
+      Maksettu_lasku_1: 'Maksettu lasku 1', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu_lasku_1
+      Paamies_laskunnro_1: 'Päämies laskunnro 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Paamies_laskunnro_1
+      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun_tai_rivin_summa_1
+      Erapaiva_lasku_1: 'Eräpäivä lasku 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Erapaiva_lasku_1
+      Maksettu_lasku_1: 'Maksettu lasku 2', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu_lasku_1
+      Paamies_laskunnro_1: 'Päämies laskunnro 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Paamies_laskunnro_1
+      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun_tai_rivin_summa_1
+      Erapaiva_lasku_1: 'Eräpäivä lasku 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Erapaiva_lasku_1
+      Maksettu_lasku_1: 'Maksettu lasku 3', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu_lasku_1
+      Paamies_laskunnro_1: 'Päämies laskunnro 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Paamies_laskunnro_1
+      Laskun_tai_rivin_summa_1: 'Laskun tai rivin summa 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Laskun_tai_rivin_summa_1
+      Erapaiva_lasku_1: 'Eräpäivä lasku 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Erapaiva_lasku_1
+      Maksettu_lasku_1: 'Maksettu lasku 4', // enums.HEADINGS.KALUSTESUUNNITELMA.Maksettu_lasku_1
       Ennakkomaksu: 'Ennakkomaksu', // enums.HEADINGS.KALUSTESUUNNITELMA.Ennakkomaksu
       TRB: 'TRB', // enums.HEADINGS.KALUSTESUUNNITELMA.TRB
-      
-      
-      
     },
   },
   //BlaBla: {
