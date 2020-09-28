@@ -1,15 +1,14 @@
-// global 
-var ss = SpreadsheetApp.getActive();
-
 const onOpen = (e) => {
   envRange = SpreadsheetApp.getActiveSpreadsheet().getRangeByName('env');
   env = envRange && envRange.getValue();
   Logger.log('Running onOpen with env ' + env);
-  Logger.log('onOpen e.authmode: ' + e.authMode)
+  Logger.log('onOpen e.authmode: ' + e.authMode);
   ui = SpreadsheetApp.getUi();
   let menu = ui.createAddonMenu();
   if (env === 'dev') {
     menu.addItem('Päivitä asennuslista', 'updateInstallationList');
+    menu.addSeparator();
+    menu.addItem('repopulate', 'repopulateConfigSheet');
     menu.addItem('Test', 'test');
     menu.addItem('Initialize', 'initialize');
     menu.addSeparator();

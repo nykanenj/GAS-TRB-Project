@@ -1,3 +1,30 @@
+// Deprecate, replace by fetchAllConsts
+const fetchPublicVersionConsts = () => {
+  
+  const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sourceSheet = spreadSheet.getSheetByName(enums.SHEETS.KALUSTESUUNNITELMA);
+  if (!sourceSheet) throwError('Välilehti ' + enums.SHEETS.KALUSTESUUNNITELMA + ' puuttuu');
+    
+  const publicVersionsFolderID = spreadSheet.getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID).getValue();
+  if (!publicVersionsFolderID || publicVersionsFolderID == '') throwError(errors.publicVersions.folderIdMissing);
+  let publicFolder;
+  try {
+    publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
+  } catch(e) {
+    throwError(errors.publicVersions.folderIdRef);
+  }
+ 
+  consts = {
+    spreadSheet,
+    sourceSheet,
+    publicVersionsFolderId,
+    publicFolder,
+  };
+  
+  return consts;
+}
+
+
 const trbArrayToHashMap = (rawTrbArray) => {
 
   trbArray = [].concat(...rawTrbArray).map(e => (!e || e === '') ? 'Kategorisoimaton' : e ); 

@@ -14,16 +14,19 @@ const errors = {
       enums.NAMEDRANGES.spaceQuantityColumnNames + '\n' +
       enums.NAMEDRANGES.KALUSTESUUNNITELMA.spaceQuantityLastColumnIndex + '\n' +
       enums.NAMEDRANGES.ASENNUSLISTA.spaceQuantityLastColumnIndex + '\n' +
+      enums.NAMEDRANGES.spaceQuantityFirstColumnName + '\n' +
       enums.NAMEDRANGES.spaceQuantityLastColumnName + '\n',
     namedRangeEmpty: 'Nimetyn kentän arvo on tyhjä. Tarkista että kaikilla nimetyillä kentillä (Named Ranges) on arvo:\n ' + 
       enums.NAMEDRANGES.spaceQuantityColumnCount + '\n' +
       enums.NAMEDRANGES.spaceQuantityColumnNames + '\n' +
       enums.NAMEDRANGES.KALUSTESUUNNITELMA.spaceQuantityLastColumnIndex + '\n' +
       enums.NAMEDRANGES.ASENNUSLISTA.spaceQuantityLastColumnIndex + '\n' +
+      enums.NAMEDRANGES.spaceQuantityFirstColumnName + '\n' +
       enums.NAMEDRANGES.spaceQuantityLastColumnName + '\n',
     countMismatch: 'Määrä-tila sarakelaskuri ei täsmää otsikkonimien määrään. Tarkista config välilehden arvot.',
     nameAlreadyExists: 'Tämä määrä-tila sarakenimi on jo käytössä!: ',
     onlyOneLeft: 'Vain yksi määrä-tila sarake jäljellä. Kaikkia määrä-tila sarakkeita ei voi poistaa!',
+    columnNamesMissing: 'Luettelo määrä-tila sarakkeiden otsikoista puuttuu config välilehdeltä',
   },
 };
 

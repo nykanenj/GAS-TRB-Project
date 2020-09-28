@@ -6,16 +6,16 @@ const addSpaceQuantityColumn = () => {
     columnCountRange,
     columnNamesRange,
     lastColumnNameRange,
-    colCount,
-    colNames,
+    sqColCount,
+    sqColNames,
     lastColName,
-    colNamesArray,
+    sqColNamesArray,
     kalustesuunnitelmaObj,
     asennuslistaObj,
   } = fetchSpaceQuantityConsts();
   
   const newColumnName = uiTextPrompt("Anna nimi uudelle määrä-tila sarakkeelle");
-  if (colNamesArray.filter(name => name === newColumnName).length > 0) throwError(errors.spaceQuantity.nameAlreadyExists + newColumnName);
+  if (sqColNamesArray.filter(name => name === newColumnName).length > 0) throwError(errors.spaceQuantity.nameAlreadyExists + newColumnName);
   
   insertColumnAndFormulas(kalustesuunnitelmaObj, newColumnName);
   insertColumnAndFormulas(asennuslistaObj, newColumnName, headingRow = 3);
@@ -24,8 +24,8 @@ const addSpaceQuantityColumn = () => {
   
   //Update config sheet metadata
   lastColumnNameRange.setValue(newColumnName);
-  columnCountRange.setValue(colCount + 1);
-  columnNamesRange.setValue(colNames + ';' + newColumnName);
+  columnCountRange.setValue(sqColCount + 1);
+  columnNamesRange.setValue(sqColNames + ';' + newColumnName);
   
   kalustesuunnitelmaObj.sheet.getRange(1, kalustesuunnitelmaObj.lastColIndex + 1).activate();
 }
@@ -42,22 +42,21 @@ const removeSpaceQuantityColumn = () => {
     columnCountRange,
     columnNamesRange,
     lastColumnNameRange,
-    colCount,
-    colNames,
+    sqColCount,
     lastColName,
-    colNamesArray,
+    sqColNamesArray,
     kalustesuunnitelmaObj,
     asennuslistaObj,
   } = fetchSpaceQuantityConsts();
   
-  if (colCount == 1) throwError(errors.spaceQuantity.onlyOneLeft);
+  if (sqColCount == 1) throwError(errors.spaceQuantity.onlyOneLeft);
   
   deleteColumnUpdateFormula(kalustesuunnitelmaObj);
   deleteColumnUpdateFormula(asennuslistaObj, headingRow = 3);
   
   lastColumnNameRange.setValue(kalustesuunnitelmaObj.sheet.getRange(1, kalustesuunnitelmaObj.lastColIndex - 1).getValue());
-  columnCountRange.setValue(colCount - 1);
-  Logger.log('Removing last item from colNamesArray :' + colNamesArray);
-  colNamesArray.pop();
-  columnNamesRange.setValue(colNamesArray.join(';'));
+  columnCountRange.setValue(sqColCount - 1);
+  Logger.log('Removing last item from colNamesArray :' + sqColNamesArray);
+  sqColNamesArray.pop();
+  columnNamesRange.setValue(sqColNamesArray.join(';'));
 }

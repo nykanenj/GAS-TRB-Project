@@ -1,5 +1,111 @@
 const updateInstallationList = () => {
- 
+  // header hashmap ASENNUSLISTA
+  // header hashmap KALUSTESUUNNITELMA
+  // lastrow KALUSTESUUNNITELMA
+  // Build the result table in memory. Headings included?? Probably yes.
+  // Try to read KALUSTESUUNNITELMA into an array? Then try to move one array column at a time into new table.
   
+  const {
+    spreadSheet,
+    kalustesuunnitelmaObj,
+    asennuslistaObj,
+    spaceQuantity,
+  } = fetchAllConsts(); // <- TODO: Finish and test this.  // fetchInstallationListConsts();
+  
+  const data = kalustesuunnitelmaObj.data;
+
+Logger.log('asennusListaDestinationRange params: asennusListaObj.startRow ' + asennuslistaObj.startRow);
+Logger.log('asennusListaDestinationRange params: kalustesuunntelmaObj.nRows ' + kalustesuunnitelmaObj.nRows);
+Logger.log('asennusListaDestinationRange params: kalustesuunnitelmaObj.nCols ' + kalustesuunnitelmaObj.nRows);
+  const asennusListaDestinationRange = asennuslistaObj.sheet.getRange(asennuslistaObj.startRow,
+                                                                      1,
+                                                                      kalustesuunnitelmaObj.nRows,
+                                                                      kalustesuunnitelmaObj.nCols);
+
+  const {
+    ID,
+    Tila,
+    Positio,
+    Tuote,
+    Maara_yht,
+    Valmistaja,
+    Kuva,
+    Vahvistettu_toimituspaiva_tehtaalta,
+    Toimitusviikko_tehtaalta,
+    Toimitus_paiva_asiakkaalle,
+    Saapunut_varastoon,
+    Toimitettu,
+  } = enums.ASENNUSLISTA.HEADINGS;
+
+  //Logger.log('data: ' + data);
+  //Logger.log('data[0][0]: ' + data[0][0]);
+  //Logger.log('data[0]: ' + data[0]);
+  //Logger.log('data[3]: ' + data[3]);
+  //Logger.log('data[][1]' + data[[0,1,2,3]][1]);
+  
+  const newArr = [];
+  newArr.push([ID,
+               Tila,
+               Positio,
+               Tuote,
+               Maara_yht,
+               Valmistaja,
+               Kuva,
+               spaceQuantity.colNamesArray,
+               Vahvistettu_toimituspaiva_tehtaalta,
+               Toimitusviikko_tehtaalta,
+               Toimitus_paiva_asiakkaalle,
+               Saapunut_varastoon,
+               Toimitettu]);
+  
+
+  Logger.log('newArr: ' + newArr);
+  Logger.log('newArr0: ' + newArr[0]);
+  Logger.log('SQ colu count ' + spaceQuantity.colCount);
+  Logger.log('Kaluste nRows ' + kalustesuunnitelmaObj.nRows);
+
+  for (let i = 1; i < kalustesuunnitelmaObj.nRows; i++) {
+  
+    
+    let id = data[i][0];
+    let tila = data[i][1]; 
+    let positio = data[i][2];
+    let tuote = data[i][3];
+    let maara_yht = data[i][4];
+    let valmistaja = data[i][5];
+    let kuva = ''; // data[i][6];
+    let spaceQuantityCells = [];
+    for (let j = 7; j < spaceQuantity.lastCol; j++) {
+      Logger.log('SspaceQuantityCells.push(data[i][j]). Value: ' + data[i][j] + ' i: ' + i + ' j: ' + j);
+      spaceQuantityCells.push(data[i][j]);
+    };
+    let vahvistettu_toimituspaiva_tehtaalta = data[i][7 + spaceQuantity.colCount];     
+    let toimitusviikko_tehtaalta = data[i][8 + spaceQuantity.colCount];
+    let toimitus_paiva_asiakkaalle = data[i][9 + spaceQuantity.colCount];
+    let saapunut_varastoon = data[i][10 + spaceQuantity.colCount];
+    let toimitettu = data[i][11 + spaceQuantity.colCount];
+    
+      
+    newArr.push([id,
+                 tila,
+                 positio,
+                 tuote,
+                 maara_yht,
+                 valmistaja,
+                 kuva,
+                 spaceQuantityCells, 
+                 vahvistettu_toimituspaiva_tehtaalta, 
+                 toimitusviikko_tehtaalta,
+                 toimitus_paiva_asiakkaalle,
+                 saapunut_varastoon,
+                 toimitettu
+               ]);
+  };
+
+  
+  Logger.log('newArr1: ' + newArr[1]);
+  Logger.log('newArr2: ' + newArr[2]);
+  asennusListaDestinationRange.setValues(newArr);
+  return;
   
 }

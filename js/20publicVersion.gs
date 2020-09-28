@@ -5,25 +5,19 @@ const createPublicVersionNoSuppliers = () => {
 const createPublicVersion = (showSuppliers = true) => {
   
   startLog('createPublicVersion');
-  const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-  const sourceSheet = spreadSheet.getSheetByName(enums.SHEETS.KALUSTESUUNNITELMA);
-  if (!sourceSheet) throwError('Välilehti ' + enums.SHEETS.KALUSTESUUNNITELMA + ' puuttuu');
-    
-  const publicVersionsFolderID = spreadSheet.getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID).getValue();
-  if (!publicVersionsFolderID || publicVersionsFolderID == '') throwError(errors.publicVersions.folderIdMissing);
-
+  const {
+    spreadSheet,
+    sourceSheet,
+    publicVersionsFolderId,
+    publicFolder,
+  } = fetchPublicVersionConsts();
+  
   const fileNameText = showSuppliers ? 'Julkinen-Versio-Päämiehet' : 'Julkinen-Versio';
   const fileName = createFileName(fileNameText);
   Logger.log('Creating file: ' + fileName);
   
   const newSpreadsheet = SpreadsheetApp.create(fileName); 
   const newFile = DriveApp.getFileById(newSpreadsheet.getId()); 
-  let publicFolder;
-  try {
-    publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
-  } catch(e) {
-    throwError(errors.publicVersions.folderIdRef);
-  }
   Logger.log('Moving file ' + fileName + ' to folderName: ' + publicFolder.getName() + ', folderID:' + publicVersionsFolderID);
   newFile.moveTo(publicFolder);
   
@@ -38,11 +32,11 @@ const createPublicVersion = (showSuppliers = true) => {
   const lastColumn = newSheet.getLastColumn();
   const headingHashmap = headingRowToHashmap(newSheet);
   Logger.log('Deleting columns...');
-  const firstDeleteCol = headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Toimittaja];
+  const firstDeleteCol = headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Toimittaja];
   const rowsToDelete = lastColumn - firstDeleteCol + 1;
   newSheet.deleteColumns(firstDeleteCol, rowsToDelete);
   if (!showSuppliers) {
-    newSheet.deleteColumn(headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Valmistaja]);
+    newSheet.deleteColumn(headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Valmistaja]);
   }
 
   showPopup("Makro 'Luo Julkinen Versio' ajettu", fileName, newSpreadsheet.getUrl(), publicFolder.getName(), publicFolder.getUrl());
@@ -58,14 +52,14 @@ const createPublicVersionByCategories = () => {
   
   const publicVersionsFolderID = spreadSheet.getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID).getValue();
   if (!publicVersionsFolderID || publicVersionsFolderID == '') throwError(errors.publicVersions.folderIdMissing);
-  
   let publicFolder;
   try {
     publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
   } catch(e) {
     throwError(errors.publicVersions.folderIdRef);
   }
-  var lastColumn = sourceSheet.getLastColumn();
+  
+  let lastColumn = sourceSheet.getLastColumn();
   const lastRow = sourceSheet.getLastRow();
   
   const fileName = createFileName('Julkinen-Versio-Kategorioittain');
@@ -82,12 +76,12 @@ const createPublicVersionByCategories = () => {
   
   Logger.log('Deleting extra columns');
   kalusteSuunnitelmaSheet.getDataRange().copyTo(kalusteSuunnitelmaSheet.getRange('A1'), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
-  var headingRowArray = kalusteSuunnitelmaSheet.getRange(1, 1, 1, lastColumn).getValues().join().split(',');
-  var headingHashmap = arrayToHashmap(headingRowArray);
+  let headingRowArray = kalusteSuunnitelmaSheet.getRange(1, 1, 1, lastColumn).getValues().join().split(',');
+  let headingHashmap = arrayToHashmap(headingRowArray);
   Logger.log('headingHashmap: ' + JSON.stringify(headingHashmap));
   Logger.log('Deleting columns...');
-  const firstDeleteCol = headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.Toimittaja];
-  const lastDeleteCol = headingHashmap[enums.HEADINGS.KALUSTESUUNNITELMA.TRB] - 1;
+  const firstDeleteCol = headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Toimittaja];
+  const lastDeleteCol = headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.TRB] - 1;
   const rowsToDelete = lastDeleteCol - firstDeleteCol + 1;
   kalusteSuunnitelmaSheet.deleteColumns(firstDeleteCol, rowsToDelete);
   SpreadsheetApp.flush();
@@ -109,8 +103,8 @@ const createPublicVersionByCategories = () => {
   const rawTrbArray = kalusteSuunnitelmaSheet.getRange(2, TRBcolIndex, lastRow - 1).getValues();
   const trbHashMap = trbArrayToHashMap(rawTrbArray);
   
-  for (var key in trbHashMap) {
-      var newSheet = newSpreadsheet.insertSheet(key);
+  for (let key in trbHashMap) {
+      let newSheet = newSpreadsheet.insertSheet(key);
       headingRow.copyTo(newSheet.getRange(1, 1, 1, lastColumn));
       const sourceRange = kalusteSuunnitelmaSheet.getRange(trbHashMap[key].start,1, trbHashMap[key].count, lastColumn);
       sourceRange.copyTo(newSheet.getRange(2, 1, trbHashMap[key].count, lastColumn));
