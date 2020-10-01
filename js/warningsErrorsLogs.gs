@@ -2,8 +2,7 @@
 // https://developers.google.com/apps-script/api/reference/rest/v1/ExecutionError
 
 const errors = {
-  maaraTila1Missing: 'Ei löydetty saraketta "Määrä tila 1" KALUSTESUUNNITELMA:sta!',
-  maaraYhtMissing: 'Ei löydetty saraketta "Määrä yht." KALUSTESUUNNITELMA:sta!',
+  headingMissing: '-välilehdeltä puuttuu seuraavat otsikot: ',
   publicVersions: {
     folderIdMissing: 'Julkisen version kansio id puuttuu config -välilehdeltä!',
     folderIdRef: 'Julkisen version kansio id viittaus on virheellinen config -välilehdellä!',

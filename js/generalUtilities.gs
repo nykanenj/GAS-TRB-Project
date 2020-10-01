@@ -2,6 +2,18 @@ const fetchAllConsts = () => {
   //TODO: Finish and test this.
   //TODO: cache these consts to be saved between runs.
   const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Julkinen versio / Public versions
+  const publicVersionsFolderID = spreadSheet.getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID).getValue();
+  if (!publicVersionsFolderID || publicVersionsFolderID == '') throwError(errors.publicVersions.folderIdMissing);
+  let publicFolder;
+  try {
+    publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
+  } catch(e) {
+    throwError(errors.publicVersions.folderIdRef);
+  }
+  
+  // Määrä-tila / Space Quantity
   const sqColumnCountRange = spreadSheet.getRangeByName(enums.NAMEDRANGES.spaceQuantityColumnCount);
   const sqColumnNamesRange = spreadSheet.getRangeByName(enums.NAMEDRANGES.spaceQuantityColumnNames);
   const sqFirstColumnNameRange = spreadSheet.getRangeByName(enums.NAMEDRANGES.spaceQuantityFirstColumnName);
@@ -15,16 +27,18 @@ const fetchAllConsts = () => {
   if (!sqColCount || !sqColNames || !sqFirstColName || !sqLastColName) throwError(errors.spaceQuantity.namedRangeEmpty);
   
   const sqColNamesArray = sqColNames.split(';');
-  if (sqColNamesArray.length !== sqColCount) throwError(errors.spaceQuantity.countMismatch); //TODO: Attempt to populate the values if possible
+  if (sqColNamesArray.length !== sqColCount) throwError(errors.spaceQuantity.countMismatch + '. sqColNamesArray.length: ' + sqColNamesArray.length + ' sqColCount ' + sqColCount); //TODO: Attempt to populate the values if possible
   
   consts = {
     spreadSheet,
+    publicVersionsFolderID,
+    publicFolder,
     spaceQuantity: {
       columnCountRange: sqColumnCountRange,
       colCount: sqColCount,
       columnNamesRange: sqColumnNamesRange,
       colNamesArray: sqColNamesArray,
-      colNames: sqColNamesArray,
+      colNames: sqColNames,
       firstColumnNameRange: sqFirstColumnNameRange,
       lastColumnNameRange: sqLastColumnNameRange,
       firstColName: sqFirstColName,
@@ -32,6 +46,7 @@ const fetchAllConsts = () => {
     },
     kalustesuunnitelmaObj: makeSheetObj(enums.SHEETS.KALUSTESUUNNITELMA),
     asennuslistaObj: makeSheetObj(enums.SHEETS.ASENNUSLISTA),
+    toimittajatrahditObj: makeSheetObj(enums.SHEETS.TOIMITTAJAT_JA_RAHDIT),
   };
 
   return consts; 
@@ -66,24 +81,33 @@ const makeSheetObj = (sheetName) => {
   }
   
   sheetObj = {
-    sheet, 
+    sheet,
+    sheetName,
     startRow,
     lastRow,
     nRows,
     lastColumn,
     nCols, 
-    headingHashmap: headingRowToHashmap(sheet, startRow),
+    headingHashmap: headingRowToHashmap(sheetName, sheet, startRow),
+    headingHashmapB0: headingRowToHashmapB0(sheet, startRow),
     data: sheet.getRange(startRow, 1, nRows, nCols).getValues(),
     spaceQuantity: {
       firstColumnIndexRange: sqFirstColumnIndexRange,
       firstColumn: sqFirstColumn,
-      lastColumnIndexRange: sqFirstColumnIndexRange,
+      lastColumnIndexRange: sqLastColumnIndexRange,
       lastColumn: sqLastColumn,
     }
   };
   
   return sheetObj;
 }
+
+const writeArrToSheet = (newArr, sheetObj, startRow = -1) => {
+  if (startRow === -1) startRow = sheetObj.startRow;
+  const destinationRange = sheetObj.sheet.getRange(startRow, 1, newArr.length, newArr[0].length);
+  destinationRange.setValues(newArr);
+};
+
 
 const addRow = () => {
   const sh = checkSheetExists(enums.SHEETS.KALUSTESUUNNITELMA);
@@ -105,7 +129,7 @@ const createFileName = (text) => {
   const activeSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
   const timeZone = SpreadsheetApp.getActive().getSpreadsheetTimeZone();
   const now = new Date();
-  const fileName = Utilities.formatDate(now, timeZone, 'yyyy-MM-dd-HH-mm') + '-' + text;
+  const fileName = getEnv() + '-' + Utilities.formatDate(now, timeZone, 'yyyy-MM-dd-HH-mm') + '-' + text;
   Logger.log('Filename: ' + fileName);
   return fileName;
 };
@@ -121,14 +145,24 @@ const uiTextPrompt = (message) => {
   } 
 };
   
-const headingRowToHashmap = (sheet, rowNum = 1) => {
+const headingRowToHashmap = (sheetName, sheet, rowNum = 1) => {
   const headingRow = sheet.getRange(rowNum, 1, 1, sheet.getLastColumn());
   const headingRowArray = headingRow.getValues().join().split(',');
+  
   Logger.log('headingRowArray for sheet ' + sheet.getName() +  ': ' + headingRowArray);
   const headingHashmap = arrayToHashmap(headingRowArray);
-  Logger.log('headingHashmap for sheet ' + sheet.getName() +  ': ' + JSON.stringify(headingHashmap));
-  if (!headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Maara_tila_1]) throwError(errors.maaraTila1Missing);
-  if (!headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Maara_yht]) throwError(errors.maaraYhtMissing);  
+  Logger.log('headingHashmap for sheet ' + sheet.getName() +  ': ' + JSON.stringify(headingHashmap)); 
+  const notFoundArr = Object.values(enums[sheetName].HEADINGS).filter(heading => !headingHashmap[heading]);
+  if (notFoundArr.length > 0) throwError(sheetName + errors.headingMissing + notFoundArr);
+  return headingHashmap;
+};
+  
+const headingRowToHashmapB0 = (sheet, rowNum = 1) => {
+  const headingRow = sheet.getRange(rowNum, 1, 1, sheet.getLastColumn());
+  const headingRowArray = headingRow.getValues().join().split(',');
+  Logger.log('B0 headingRowArrayB0 for sheet ' + sheet.getName() +  ': ' + headingRowArray);
+  const headingHashmap = arrayToHashmapB0(headingRowArray);
+  Logger.log('B0 headingHashmapB0 for sheet ' + sheet.getName() +  ': ' + JSON.stringify(headingHashmap));  
   return headingHashmap;
 };
   
@@ -137,6 +171,15 @@ const arrayToHashmap = array =>
     acc[val] = index + 1
     return acc;
 }, {});
+  
+const arrayToHashmapB0 = array =>
+  array.reduce((acc, val, index) => {
+    acc[val] = index
+    return acc;
+}, {});
+  
+const getSingleColumn = (sheetObj, colName) => sheetObj.sheet.getRange(sheetObj.startRow, sheetObj.headingHashmap[colName], sheetObj.nRows);
+
 
 const showPopup = (title, fileName, fileUrl, folderName, folderUrl) => {
   const html = '<html><body><div>' + 'Tiedosto: ' + '</div><a href="' + fileUrl + '" target="blank">'+fileName+'</a><br><br>' + 
@@ -145,3 +188,9 @@ const showPopup = (title, fileName, fileUrl, folderName, folderUrl) => {
   let ui = HtmlService.createHtmlOutput(html);
   SpreadsheetApp.getUi().showModelessDialog(ui, title);
 };
+  
+const getEnv = () => {
+  const envRange = SpreadsheetApp.getActiveSpreadsheet().getRangeByName('env');
+  const env = envRange && envRange.getValue();
+  return env;
+}

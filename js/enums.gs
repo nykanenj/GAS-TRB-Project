@@ -10,7 +10,7 @@ const enums = {
     KALUSTESUUNNITELMA: 'KALUSTESUUNNITELMA', // enums.SHEETS.KALUSTESUUNNITELMA
     MAKSUAIKATAULUKKO: 'MAKSUAIKATAULUKKO', // enums.SHEETS.MAKSUAIKATAULUKKO
     ASENNUSLISTA: 'ASENNUSLISTA', // enums.SHEETS.ASENNUSLISTA
-    TOIMITTAJAT_JA_RAHDIT: 'TOIMITTAJAT JA RAHDIT', // enums.SHEETS.TOIMITTAJAT JA RAHDIT
+    TOIMITTAJAT_JA_RAHDIT: 'TOIMITTAJAT_JA_RAHDIT', // enums.SHEETS.TOIMITTAJAT JA RAHDIT
     TILIASEMASELVITYS: 'TILIASEMASELVITYS'
   },
   // enums.NAMEDRANGES.spaceQuantityFirstColumnName
@@ -36,7 +36,7 @@ const enums = {
   // enums.HEADINGS.KALUSTESUUNNITELMA.ID
   KALUSTESUUNNITELMA: {
     META: {
-      STARTROW: 1,
+      STARTROW: 11,
     },
     HEADINGS: {
       ID: 'ID', // enums.KALUSTESUUNNITELMA.HEADINGS.ID
@@ -112,6 +112,7 @@ const enums = {
       Tila: 'Tila', // enums.ASENNUSLISTA.HEADINGS.Tila
       Positio: 'Positio', // enums.ASENNUSLISTA.HEADINGS.Positio
       Tuote: 'Tuote', // enums.ASENNUSLISTA.HEADINGS.Tuote
+      Maara_yht: 'Määrä yht.', // enums.ASENNUSLISTA.HEADINGS.Maara_yht 
       Valmistaja: 'Valmistaja', // enums.ASENNUSLISTA.HEADINGS.Valmistaja
       Kuva: 'Kuva', // enums.ASENNUSLISTA.HEADINGS.Kuva
       Vahvistettu_toimituspaiva_tehtaalta: 'Vahvistettu toimituspäivä tehtaalta', // enums.ASENNUSLISTA.HEADINGS.Vahvistettu toimituspäivä tehtaalta
@@ -119,6 +120,15 @@ const enums = {
       Toimitus_paiva_asiakkaalle: 'Toimitus-päivä asiakkaalle', // enums.ASENNUSLISTA.HEADINGS.Toimitus-päivä asiakkaalle
       Saapunut_varastoon: 'Saapunut varastoon', // enums.ASENNUSLISTA.HEADINGS.Saapunut varastoon
       Toimitettu: 'Toimitettu', // enums.ASENNUSLISTA.HEADINGS.Toimitettu
+    },
+  },
+  TOIMITTAJAT_JA_RAHDIT: {
+    META: {
+      STARTROW: 3,
+    },
+    HEADINGS: {
+      Paamies: 'Päämies',
+      Kokonaisrahti: 'Kokonaisrahti',
     },
   },
   //BLABLA: {

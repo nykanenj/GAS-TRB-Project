@@ -3,31 +3,23 @@ const addSpaceQuantityColumn = () => {
   startLog('addSpaceQuantityColumn');
   const {
     spreadSheet,
-    columnCountRange,
-    columnNamesRange,
-    lastColumnNameRange,
-    sqColCount,
-    sqColNames,
-    lastColName,
-    sqColNamesArray,
+    spaceQuantity,
     kalustesuunnitelmaObj,
     asennuslistaObj,
-  } = fetchSpaceQuantityConsts();
+  } = fetchAllConsts();
   
   const newColumnName = uiTextPrompt("Anna nimi uudelle määrä-tila sarakkeelle");
-  if (sqColNamesArray.filter(name => name === newColumnName).length > 0) throwError(errors.spaceQuantity.nameAlreadyExists + newColumnName);
+  if (spaceQuantity.colNamesArray.filter(name => name === newColumnName).length > 0) throwError(errors.spaceQuantity.nameAlreadyExists + newColumnName);
   
   insertColumnAndFormulas(kalustesuunnitelmaObj, newColumnName);
-  insertColumnAndFormulas(asennuslistaObj, newColumnName, headingRow = 3);
-  // TODO: Insert column into other sheets
-  // TODO: Update formulas on other sheets
+  insertColumnAndFormulas(asennuslistaObj, newColumnName); //TODO: Formula not needed in asennuslista? But column is.
   
   //Update config sheet metadata
-  lastColumnNameRange.setValue(newColumnName);
-  columnCountRange.setValue(sqColCount + 1);
-  columnNamesRange.setValue(sqColNames + ';' + newColumnName);
+  spaceQuantity.lastColumnNameRange.setValue(newColumnName);
+  spaceQuantity.columnCountRange.setValue(spaceQuantity.colCount + 1);
+  spaceQuantity.columnNamesRange.setValue(spaceQuantity.colNames + ';' + newColumnName);
   
-  kalustesuunnitelmaObj.sheet.getRange(1, kalustesuunnitelmaObj.lastColIndex + 1).activate();
+  kalustesuunnitelmaObj.sheet.getRange(1, kalustesuunnitelmaObj.spaceQuantity.lastColumn + 1).activate();
 }
 
 const renameSpaceQuantityColumn = () => {
@@ -39,24 +31,19 @@ const removeSpaceQuantityColumn = () => {
   startLog('removeSpaceQuantityColumn'); 
   const {
     spreadSheet,
-    columnCountRange,
-    columnNamesRange,
-    lastColumnNameRange,
-    sqColCount,
-    lastColName,
-    sqColNamesArray,
+    spaceQuantity,
     kalustesuunnitelmaObj,
     asennuslistaObj,
-  } = fetchSpaceQuantityConsts();
+  } = fetchAllConsts();
   
-  if (sqColCount == 1) throwError(errors.spaceQuantity.onlyOneLeft);
+  if (spaceQuantity.colCount == 1) throwError(errors.spaceQuantity.onlyOneLeft);
   
   deleteColumnUpdateFormula(kalustesuunnitelmaObj);
-  deleteColumnUpdateFormula(asennuslistaObj, headingRow = 3);
+  deleteColumnUpdateFormula(asennuslistaObj);
   
-  lastColumnNameRange.setValue(kalustesuunnitelmaObj.sheet.getRange(1, kalustesuunnitelmaObj.lastColIndex - 1).getValue());
-  columnCountRange.setValue(sqColCount - 1);
-  Logger.log('Removing last item from colNamesArray :' + sqColNamesArray);
-  sqColNamesArray.pop();
-  columnNamesRange.setValue(sqColNamesArray.join(';'));
+  spaceQuantity.lastColumnNameRange.setValue(kalustesuunnitelmaObj.sheet.getRange(kalustesuunnitelmaObj.startRow, kalustesuunnitelmaObj.spaceQuantity.lastColumn - 1).getValue());
+  spaceQuantity.columnCountRange.setValue(spaceQuantity.colCount - 1);
+  Logger.log('Removing last item from colNamesArray :' + spaceQuantity.colNamesArray);
+  spaceQuantity.colNamesArray.pop();
+  spaceQuantity.columnNamesRange.setValue(spaceQuantity.colNamesArray.join(';'));
 }

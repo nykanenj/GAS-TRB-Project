@@ -10,17 +10,10 @@ const updateInstallationList = () => {
     kalustesuunnitelmaObj,
     asennuslistaObj,
     spaceQuantity,
-  } = fetchAllConsts(); // <- TODO: Finish and test this.  // fetchInstallationListConsts();
+  } = fetchAllConsts();
   
   const data = kalustesuunnitelmaObj.data;
-
-Logger.log('asennusListaDestinationRange params: asennusListaObj.startRow ' + asennuslistaObj.startRow);
-Logger.log('asennusListaDestinationRange params: kalustesuunntelmaObj.nRows ' + kalustesuunnitelmaObj.nRows);
-Logger.log('asennusListaDestinationRange params: kalustesuunnitelmaObj.nCols ' + kalustesuunnitelmaObj.nRows);
-  const asennusListaDestinationRange = asennuslistaObj.sheet.getRange(asennuslistaObj.startRow,
-                                                                      1,
-                                                                      kalustesuunnitelmaObj.nRows,
-                                                                      kalustesuunnitelmaObj.nCols);
+  const headingHashmapB0 = kalustesuunnitelmaObj.headingHashmapB0;
 
   const {
     ID,
@@ -36,12 +29,6 @@ Logger.log('asennusListaDestinationRange params: kalustesuunnitelmaObj.nCols ' +
     Saapunut_varastoon,
     Toimitettu,
   } = enums.ASENNUSLISTA.HEADINGS;
-
-  //Logger.log('data: ' + data);
-  //Logger.log('data[0][0]: ' + data[0][0]);
-  //Logger.log('data[0]: ' + data[0]);
-  //Logger.log('data[3]: ' + data[3]);
-  //Logger.log('data[][1]' + data[[0,1,2,3]][1]);
   
   const newArr = [];
   newArr.push([ID,
@@ -51,39 +38,32 @@ Logger.log('asennusListaDestinationRange params: kalustesuunnitelmaObj.nCols ' +
                Maara_yht,
                Valmistaja,
                Kuva,
-               spaceQuantity.colNamesArray,
+               ...spaceQuantity.colNamesArray,
                Vahvistettu_toimituspaiva_tehtaalta,
                Toimitusviikko_tehtaalta,
                Toimitus_paiva_asiakkaalle,
                Saapunut_varastoon,
                Toimitettu]);
-  
-
-  Logger.log('newArr: ' + newArr);
-  Logger.log('newArr0: ' + newArr[0]);
-  Logger.log('SQ colu count ' + spaceQuantity.colCount);
-  Logger.log('Kaluste nRows ' + kalustesuunnitelmaObj.nRows);
 
   for (let i = 1; i < kalustesuunnitelmaObj.nRows; i++) {
   
     
-    let id = data[i][0];
-    let tila = data[i][1]; 
-    let positio = data[i][2];
-    let tuote = data[i][3];
-    let maara_yht = data[i][4];
-    let valmistaja = data[i][5];
-    let kuva = ''; // data[i][6];
+    let id = data[i][headingHashmapB0[ID]];
+    let tila = data[i][headingHashmapB0[Tila]]; 
+    let positio = data[i][headingHashmapB0[Positio]];
+    let tuote = data[i][headingHashmapB0[Tuote]];
+    let maara_yht = data[i][headingHashmapB0[Maara_yht]];
+    let valmistaja = data[i][headingHashmapB0[Valmistaja]];
+    let kuva = 'kuva'; // data[i][6];
     let spaceQuantityCells = [];
-    for (let j = 7; j < spaceQuantity.lastCol; j++) {
-      Logger.log('SspaceQuantityCells.push(data[i][j]). Value: ' + data[i][j] + ' i: ' + i + ' j: ' + j);
+    for (let j = kalustesuunnitelmaObj.spaceQuantity.firstColumn - 1; j <= kalustesuunnitelmaObj.spaceQuantity.lastColumn - 1; j++) { // -1 to get base0 value used in array
       spaceQuantityCells.push(data[i][j]);
     };
-    let vahvistettu_toimituspaiva_tehtaalta = data[i][7 + spaceQuantity.colCount];     
-    let toimitusviikko_tehtaalta = data[i][8 + spaceQuantity.colCount];
-    let toimitus_paiva_asiakkaalle = data[i][9 + spaceQuantity.colCount];
-    let saapunut_varastoon = data[i][10 + spaceQuantity.colCount];
-    let toimitettu = data[i][11 + spaceQuantity.colCount];
+    let vahvistettu_toimituspaiva_tehtaalta = data[i][headingHashmapB0[Vahvistettu_toimituspaiva_tehtaalta]];     
+    let toimitusviikko_tehtaalta = 'toimitusvk tehtaalta'
+    let toimitus_paiva_asiakkaalle = data[i][headingHashmapB0[Toimitus_paiva_asiakkaalle]];
+    let saapunut_varastoon = data[i][headingHashmapB0[Saapunut_varastoon]];
+    let toimitettu = data[i][Toimitettu];
     
       
     newArr.push([id,
@@ -93,7 +73,7 @@ Logger.log('asennusListaDestinationRange params: kalustesuunnitelmaObj.nCols ' +
                  maara_yht,
                  valmistaja,
                  kuva,
-                 spaceQuantityCells, 
+                 ...spaceQuantityCells, 
                  vahvistettu_toimituspaiva_tehtaalta, 
                  toimitusviikko_tehtaalta,
                  toimitus_paiva_asiakkaalle,
@@ -101,11 +81,17 @@ Logger.log('asennusListaDestinationRange params: kalustesuunnitelmaObj.nCols ' +
                  toimitettu
                ]);
   };
+  
+  writeArrToSheet(newArr, asennuslistaObj);
 
-  
-  Logger.log('newArr1: ' + newArr[1]);
-  Logger.log('newArr2: ' + newArr[2]);
-  asennusListaDestinationRange.setValues(newArr);
-  return;
-  
+  // Move picture column
+  const picturesSourceCol = getSingleColumn(kalustesuunnitelmaObj, Kuva);
+  const picturesDestinationCol = getSingleColumn(asennuslistaObj, Kuva);
+  picturesSourceCol.copyTo(picturesDestinationCol);
+
+  // Update date https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+  const now = new Date();
+  const timeZone = SpreadsheetApp.getActive().getSpreadsheetTimeZone();
+  const cellText = 'Päivitetty: ' + Utilities.formatDate(now, timeZone, "dd.MM.yyyy 'klo' HH:mm:ss");
+  asennuslistaObj.sheet.getRange('D1').setValue(cellText);
 }
