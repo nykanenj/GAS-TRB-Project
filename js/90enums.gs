@@ -129,6 +129,8 @@ const enums = {
     HEADINGS: {
       Paamies: 'Päämies',
       Kokonaisrahti: 'Kokonaisrahti',
+      Tuoterivit: 'Tuoterivit',
+      Rahti_per_tuoterivi: 'Rahti per tuoterivi', 
     },
   },
   //BLABLA: {

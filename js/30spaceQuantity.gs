@@ -19,7 +19,7 @@ const addSpaceQuantityColumn = () => {
   spaceQuantity.columnCountRange.setValue(spaceQuantity.colCount + 1);
   spaceQuantity.columnNamesRange.setValue(spaceQuantity.colNames + ';' + newColumnName);
   
-  kalustesuunnitelmaObj.sheet.getRange(1, kalustesuunnitelmaObj.spaceQuantity.lastColumn + 1).activate();
+  kalustesuunnitelmaObj.sheet.getRange(kalustesuunnitlemaObj.startRow, kalustesuunnitelmaObj.spaceQuantity.lastColumn + 1).activate();
 }
 
 const renameSpaceQuantityColumn = () => {
@@ -47,3 +47,4 @@ const removeSpaceQuantityColumn = () => {
   spaceQuantity.colNamesArray.pop();
   spaceQuantity.columnNamesRange.setValue(spaceQuantity.colNamesArray.join(';'));
 }
+  

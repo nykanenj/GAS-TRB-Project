@@ -79,6 +79,9 @@ const makeSheetObj = (sheetName) => {
   } else {
     Logger.log('Enum not defined for enums.NAMEDRANGES[' + sheetName + ']');
   }
+
+  const col = headingRowToHashmap(sheetName, sheet, startRow);
+  const colB0 = headingRowToHashmapB0(sheet, startRow);
   
   sheetObj = {
     sheet,
@@ -88,8 +91,8 @@ const makeSheetObj = (sheetName) => {
     nRows,
     lastColumn,
     nCols, 
-    headingHashmap: headingRowToHashmap(sheetName, sheet, startRow),
-    headingHashmapB0: headingRowToHashmapB0(sheet, startRow),
+    col,
+    colB0,
     data: sheet.getRange(startRow, 1, nRows, nCols).getValues(),
     spaceQuantity: {
       firstColumnIndexRange: sqFirstColumnIndexRange,
@@ -102,10 +105,10 @@ const makeSheetObj = (sheetName) => {
   return sheetObj;
 }
 
-const writeArrToSheet = (newArr, sheetObj, startRow = -1) => {
-  if (startRow === -1) startRow = sheetObj.startRow;
-  const destinationRange = sheetObj.sheet.getRange(startRow, 1, newArr.length, newArr[0].length);
+const writeArrToSheet = (newArr, sheetObj, dataOnly = 0) => {
+  const destinationRange = sheetObj.sheet.getRange(sheetObj.startRow + dataOnly, 1, newArr.length, newArr[0].length);
   destinationRange.setValues(newArr);
+  return destinationRange;
 };
 
 
@@ -145,6 +148,15 @@ const uiTextPrompt = (message) => {
   } 
 };
   
+const createA1ColRef = (sheetObj, colHeading, dataOnly = 0) => {
+  const sheetName = sheetObj.sheetName;
+  const colIndex = sheetObj.col[colHeading];
+  const startCell = sheetObj.sheet.getRange(sheetObj.startRow + dataOnly, colIndex).getA1Notation(); // Offset by +1 if dataOnly is true. true = 1, false = 0. Verified that this works. 
+  const lastCell = sheetObj.sheet.getRange(sheetObj.lastRow, colIndex).getA1Notation();
+  return sheetName + '!' + startCell + ':' + lastCell;
+}
+  
+  
 const headingRowToHashmap = (sheetName, sheet, rowNum = 1) => {
   const headingRow = sheet.getRange(rowNum, 1, 1, sheet.getLastColumn());
   const headingRowArray = headingRow.getValues().join().split(',');
@@ -161,9 +173,9 @@ const headingRowToHashmapB0 = (sheet, rowNum = 1) => {
   const headingRow = sheet.getRange(rowNum, 1, 1, sheet.getLastColumn());
   const headingRowArray = headingRow.getValues().join().split(',');
   Logger.log('B0 headingRowArrayB0 for sheet ' + sheet.getName() +  ': ' + headingRowArray);
-  const headingHashmap = arrayToHashmapB0(headingRowArray);
-  Logger.log('B0 headingHashmapB0 for sheet ' + sheet.getName() +  ': ' + JSON.stringify(headingHashmap));  
-  return headingHashmap;
+  const headingHashmapB0 = arrayToHashmapB0(headingRowArray);
+  Logger.log('B0 headingHashmapB0 for sheet ' + sheet.getName() +  ': ' + JSON.stringify(headingHashmapB0));  
+  return headingHashmapB0;
 };
   
 const arrayToHashmap = array =>
@@ -178,7 +190,7 @@ const arrayToHashmapB0 = array =>
     return acc;
 }, {});
   
-const getSingleColumn = (sheetObj, colName) => sheetObj.sheet.getRange(sheetObj.startRow, sheetObj.headingHashmap[colName], sheetObj.nRows);
+const getSingleColumn = (sheetObj, colName) => sheetObj.sheet.getRange(sheetObj.startRow, sheetObj.col[colName], sheetObj.nRows);
 
 
 const showPopup = (title, fileName, fileUrl, folderName, folderUrl) => {

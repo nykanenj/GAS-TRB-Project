@@ -13,7 +13,7 @@ const updateInstallationList = () => {
   } = fetchAllConsts();
   
   const data = kalustesuunnitelmaObj.data;
-  const headingHashmapB0 = kalustesuunnitelmaObj.headingHashmapB0;
+  const colB0 = kalustesuunnitelmaObj.colB0;
 
   const {
     ID,
@@ -48,21 +48,21 @@ const updateInstallationList = () => {
   for (let i = 1; i < kalustesuunnitelmaObj.nRows; i++) {
   
     
-    let id = data[i][headingHashmapB0[ID]];
-    let tila = data[i][headingHashmapB0[Tila]]; 
-    let positio = data[i][headingHashmapB0[Positio]];
-    let tuote = data[i][headingHashmapB0[Tuote]];
-    let maara_yht = data[i][headingHashmapB0[Maara_yht]];
-    let valmistaja = data[i][headingHashmapB0[Valmistaja]];
+    let id = data[i][colB0[ID]];
+    let tila = data[i][colB0[Tila]]; 
+    let positio = data[i][colB0[Positio]];
+    let tuote = data[i][colB0[Tuote]];
+    let maara_yht = data[i][colB0[Maara_yht]];
+    let valmistaja = data[i][colB0[Valmistaja]];
     let kuva = 'kuva'; // data[i][6];
     let spaceQuantityCells = [];
     for (let j = kalustesuunnitelmaObj.spaceQuantity.firstColumn - 1; j <= kalustesuunnitelmaObj.spaceQuantity.lastColumn - 1; j++) { // -1 to get base0 value used in array
       spaceQuantityCells.push(data[i][j]);
     };
-    let vahvistettu_toimituspaiva_tehtaalta = data[i][headingHashmapB0[Vahvistettu_toimituspaiva_tehtaalta]];     
+    let vahvistettu_toimituspaiva_tehtaalta = data[i][colB0[Vahvistettu_toimituspaiva_tehtaalta]];     
     let toimitusviikko_tehtaalta = 'toimitusvk tehtaalta'
-    let toimitus_paiva_asiakkaalle = data[i][headingHashmapB0[Toimitus_paiva_asiakkaalle]];
-    let saapunut_varastoon = data[i][headingHashmapB0[Saapunut_varastoon]];
+    let toimitus_paiva_asiakkaalle = data[i][colB0[Toimitus_paiva_asiakkaalle]];
+    let saapunut_varastoon = data[i][colB0[Saapunut_varastoon]];
     let toimitettu = data[i][Toimitettu];
     
       
