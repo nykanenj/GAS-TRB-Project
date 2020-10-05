@@ -9,6 +9,7 @@ const onOpen = (e) => {
     menu.addSeparator();
     menu.addItem("repopulate", "repopulateConfigSheet");
     menu.addItem("Test", "test");
+    menu.addItem("Automated tests", "runAutomatedTests");
     menu.addItem("Initialize", "initialize");
     menu.addSeparator();
   }

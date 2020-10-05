@@ -3,7 +3,6 @@ const fetchAllConsts = () => {
   //TODO: cache these consts to be saved between runs.
   const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
 
-  // Folder ID's TODO: TEST THAT THIS WORKS
   const folders = Object.values(enums.NAMEDRANGES.FOLDERS).reduce(
     (acc, folderName) => {
       const folderNameID = folderName + "ID";

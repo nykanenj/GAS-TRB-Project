@@ -65,6 +65,7 @@ const createPublicVersion = (showSuppliers = true) => {
     folders.publicVersionsFolder.getName(),
     folders.publicVersionsFolder.getUrl()
   );
+  return newSpreadsheet;
 };
 
 const createPublicVersionByCategories = () => {

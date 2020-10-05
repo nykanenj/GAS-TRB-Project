@@ -17,6 +17,7 @@ const enums = {
   NAMEDRANGES: {
     env: "env", // enums.NAMEDRANGES.env
     FOLDERS: {
+      parentFolder: "parentFolder",
       publicVersionsFolder: "publicVersionsFolder", // enums.NAMEDRANGES.FOLDERS.publicVersionsFolderID
       installationListFolder: "installationListFolder",
       supplierListsFolder: "supplierListsFolder",
