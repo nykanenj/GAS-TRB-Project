@@ -1,89 +1,28 @@
-const createPublicVersionNoSuppliers = () => {
-  createPublicVersion((showSuppliers = false));
-};
+const createSupplierLists = () => {
+  startLog("createSupplierLists");
 
-const createPublicVersion = (showSuppliers = true) => {
-  startLog("createPublicVersion");
-  const { spreadSheet, kalustesuunnitelmaObj, folders } = fetchAllConsts();
+  const {
+    spreadSheet,
+    kalustesuunnitelmaObj,
+    folders,
+    supplierListsFolderID,
+    supplierListsFolder,
+  } = fetchAllConsts();
 
-  const sourceSheet = kalustesuunnitelmaObj.sheet;
+  return;
 
-  const fileNameText = showSuppliers
-    ? "Julkinen-Versio-Päämiehet"
-    : "Julkinen-Versio";
-  const fileName = createFileName(fileNameText);
-  Logger.log("Creating file: " + fileName);
-
-  const newSpreadsheet = SpreadsheetApp.create(fileName);
-  const newFile = DriveApp.getFileById(newSpreadsheet.getId());
-  Logger.log(
-    "Moving file " +
-      fileName +
-      " to folderName: " +
-      folders.publicVersionsFolder.getName() +
-      ", folderID:" +
-      folders.publicVersionsFolderID
-  );
-  newFile.moveTo(folders.publicVersionsFolder);
-
-  Logger.log("Moving values...");
-  const newSheet = sourceSheet.copyTo(newSpreadsheet);
-  newSheet.setName(enums.SHEETS.KALUSTESUUNNITELMA);
-  const sheet1 = newSpreadsheet.getSheetByName("Sheet1");
-  newSpreadsheet.deleteSheet(sheet1);
-
-  SpreadsheetApp.flush();
-  newSheet.getRange(1, 7, 7, 2).clearContent(); // Remove internal information
-  newSheet
-    .getDataRange()
-    .copyTo(
-      newSheet.getRange("A1"),
-      SpreadsheetApp.CopyPasteType.PASTE_VALUES,
-      false
-    );
-  const lastColumn = newSheet.getLastColumn();
-  const headingHashmap = headingRowToHashmap(
-    enums.SHEETS.KALUSTESUUNNITELMA,
-    newSheet,
-    enums.KALUSTESUUNNITELMA.META.STARTROW
-  );
-  Logger.log("Deleting columns...");
-  const firstDeleteCol =
-    headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Toimittaja];
-  const colsToDelete = lastColumn - firstDeleteCol + 1;
-  newSheet.deleteColumns(firstDeleteCol, colsToDelete);
-  if (!showSuppliers) {
-    newSheet.deleteColumn(
-      headingHashmap[enums.KALUSTESUUNNITELMA.HEADINGS.Valmistaja]
-    );
-  }
-
-  showPopup(
-    "Makro 'Luo Julkinen Versio' ajettu",
-    fileName,
-    newSpreadsheet.getUrl(),
-    folders.publicVersionsFolder.getName(),
-    folders.publicVersionsFolder.getUrl()
-  );
-};
-
-const createPublicVersionByCategories = () => {
-  startLog("createPublicVersionByCategories");
-
-  const { spreadSheet, kalustesuunnitelmaObj, folders } = fetchAllConsts();
-
-  const fileName = createFileName("Julkinen-Versio-Kategorioittain");
+  const fileName = createFileName("Päämieslistat");
   Logger.log(
     "Creating and moving file " +
       fileName +
       " to folderName: " +
-      folders.publicVersionsFolder.getName() +
+      folders.supplierListsFolder.getName() +
       ", folderID:" +
-      folders.publicVersionsFolderID
+      folders.supplierListsFolderID
   );
   const newSpreadsheet = SpreadsheetApp.create(fileName);
   const newFile = DriveApp.getFileById(newSpreadsheet.getId());
-  newFile.moveTo(folders.publicVersionsFolder);
+  newFile.moveTo(folders.supplierListsFolder);
 
   Logger.log("Copying KALUSTESUUNNITELMA sheet...");
   const kalusteSuunnitelmaSheet = kalustesuunnitelmaObj.sheet.copyTo(
@@ -174,11 +113,11 @@ const createPublicVersionByCategories = () => {
     "Makro 'Luo Julkinen Versio Kategorioittain' ajettu",
     fileName,
     newSpreadsheet.getUrl(),
-    folders.publicVersionsFolder.getName(),
-    folders.publicVersionsFolder.getUrl()
+    folders.supplierListsFolder.getName(),
+    folders.supplierListsFolder.getUrl()
   );
 };
-
+/*
 const trbArrayToHashMap = (rawTrbArray) => {
   trbArray = []
     .concat(...rawTrbArray)
@@ -213,3 +152,4 @@ const trbArrayToHashMap = (rawTrbArray) => {
 
   return trbHashMap;
 };
+*/
