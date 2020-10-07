@@ -2,6 +2,7 @@ const fetchAllConsts = () => {
   //TODO: Finish and test this.
   //TODO: cache these consts to be saved between runs.
   const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+  const file = DriveApp.getFileById(spreadSheet.getId());
 
   const folders = Object.values(enums.NAMEDRANGES.FOLDERS).reduce(
     (acc, folderName) => {
@@ -22,34 +23,6 @@ const fetchAllConsts = () => {
     },
     {}
   );
-
-  /*
-  // Julkinen versio / Public versions
-  const publicVersionsFolderID = spreadSheet
-    .getRangeByName(enums.NAMEDRANGES.publicVersionsFolderID)
-    .getValue();
-  if (!publicVersionsFolderID || publicVersionsFolderID == "")
-    throwError(errors.publicVersions.folderIdMissing);
-  let publicFolder;
-  try {
-    publicFolder = DriveApp.getFolderById(publicVersionsFolderID);
-  } catch (e) {
-    throwError(errors.publicVersions.folderIdRef);
-  }
-
-  // Päämieslistat
-  const supplierListsFolderID = spreadSheet
-    .getRangeByName(enums.NAMEDRANGES.supplierListsFolderID)
-    .getValue();
-  if (!supplierListsFolderID || supplierListsFolderID == "")
-    throwError(errors.publicVersions.folderIdMissing);
-  let supplierListsFolder;
-  try {
-    supplierListsFolder = DriveApp.getFolderById(publicVersionsFolderID);
-  } catch (e) {
-    throwError(errors.publicVersions.folderIdRef);
-  }
-  */
 
   // Määrä-tila / Space Quantity
   const sqColumnCountRange = spreadSheet.getRangeByName(
@@ -91,6 +64,7 @@ const fetchAllConsts = () => {
 
   consts = {
     spreadSheet,
+    file,
     folders,
     spaceQuantity: {
       columnCountRange: sqColumnCountRange,

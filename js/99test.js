@@ -39,11 +39,26 @@ const runAutomatedTests = () => {
     );
   }
 
+  // TODO: test that the parent folder is set correctly for this spreadsheet. Find all parent folders and make sure it is found in one of them.
+  testParentFolder();
+
   testFolderNesting();
 
   // const publicVersionFile = createPublicVersion();
+  // TODO: Test that publicVersion file is good.
 
   // const publicVersionNoSuppliers = createPublicVersionNoSuppliers();
+  // TODO: Test that publicVersion file is good.
+};
+
+const testParentFolder = () => {
+  const { file, folders } = fetchAllConsts();
+  const parents = file.getParents();
+  while (parents.hasNext()) {
+    const folder = parents.next();
+    if (folder.getId() === folders.parentFolder.getId()) return true;
+  }
+  throwError(errors.wrongParent);
 };
 
 const testFolderNesting = () => {
@@ -51,9 +66,10 @@ const testFolderNesting = () => {
 
   const { parentFolderID, parentFolder } = folders;
 
-  Object.Values(enums.NAMEDRANGES.FOLDERS).filter((folderName) => {
-    if (folderName + "ID" === enums.NAMEDRANGES.FOLDERS.parentFolderID)
-      return false; // skip the parentfolder itself
+  Object.values(enums.NAMEDRANGES.FOLDERS).filter((folderName) => {
+    Logger.log("folderName " + folderName);
+    Logger.log("enum parentF" + enums.NAMEDRANGES.FOLDERS.parentFolder);
+    if (folderName === enums.NAMEDRANGES.FOLDERS.parentFolder) return false; // skip the parentfolder itself
     const folder = folders[folderName];
     const parents = folder.getParents();
     let parentFound = false;
@@ -65,14 +81,8 @@ const testFolderNesting = () => {
       throwError(
         folder.getName() + errors.wrongFolder + parentFolder.getName()
       );
-    } else {
-      Logger.log("Folder nesting test ok!");
     }
+    return true;
   });
-
-  let foldersBelowParent = parentFolder.getFolders();
-  while (foldersBelowParent.hasNext()) {
-    var folder = folders.next();
-    Logger.log(folder.getName());
-  }
+  Logger.log("Folder nesting test ok!");
 };

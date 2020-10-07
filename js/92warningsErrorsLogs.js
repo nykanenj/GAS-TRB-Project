@@ -6,7 +6,10 @@ const errors = {
   folderIdMissing: "Kansio id puuttuu config -välilehdeltä! Tämä id puuttuu: ",
   folderIdRef:
     "Kansio id viittaus on virheellinen config -välilehdellä! Tarkista id: ",
-  wrongFolder: " <- !!!Kansio on väärässä pääkansiossa!!! -> ",
+  wrongFolder:
+    " !!!Viittaus toisen projektin kansioon!!! Kansion täytyy olla pääkansion alla: ",
+  wrongParent:
+    "Virhe tämän tiedoston sijainnissa! Tarkista että tiedosto on oikeassa kansiossa. Tarkista myös parentFolderID -viittaus config välilehdellä.",
   spaceQuantity: {
     namedRangeMissing:
       "Nimetty kenttä puuttuu. Tarkista että kaikki nimetyt kentät (Named Ranges) löytyy tiedostosta:\n " +
