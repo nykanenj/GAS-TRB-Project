@@ -5,8 +5,9 @@ const updateInstallationList = () => {
   // Build the result table in memory. Headings included?? Probably yes.
   // Try to read KALUSTESUUNNITELMA into an array? Then try to move one array column at a time into new table.
 
+  // TODO edit this macro so that it operates on a seperate google sheet file. Add file id tracking to config sheet and create a NAMEDRANGE for it.
+
   const {
-    spreadSheet,
     kalustesuunnitelmaObj,
     asennuslistaObj,
     spaceQuantity,

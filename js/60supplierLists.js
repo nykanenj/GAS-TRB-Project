@@ -9,17 +9,11 @@ const createSupplierLists = () => {
     supplierListsFolder,
   } = fetchAllConsts();
 
-  return;
-
   const fileName = createFileName("Päämieslistat");
-  Logger.log(
-    "Creating and moving file " +
-      fileName +
-      " to folderName: " +
-      folders.supplierListsFolder.getName() +
-      ", folderID:" +
-      folders.supplierListsFolderID
-  );
+  Logger.log(`Creating and moving file ${fileName} 
+   to folderName ${folders.supplierListsFolder.getName()}, 
+   folderID: ${folders.supplierListsFolderID}`);
+
   const newSpreadsheet = SpreadsheetApp.create(fileName);
   const newFile = DriveApp.getFileById(newSpreadsheet.getId());
   newFile.moveTo(folders.supplierListsFolder);
@@ -59,7 +53,6 @@ const createSupplierLists = () => {
     lastColumn
   );
   const headingRowArray = headingRow.getValues().join().split(",");
-  Logger.log("headingRowArray: " + headingRowArray);
   const headingHashmap = arrayToHashmap(headingRowArray);
   Logger.log("headingHashmap: " + JSON.stringify(headingHashmap));
 

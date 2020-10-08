@@ -6,10 +6,20 @@ const errors = {
   folderIdMissing: "Kansio id puuttuu config -välilehdeltä! Tämä id puuttuu: ",
   folderIdRef:
     "Kansio id viittaus on virheellinen config -välilehdellä! Tarkista id: ",
-  wrongFolder:
-    " !!!Viittaus toisen projektin kansioon!!! Kansion täytyy olla pääkansion alla: ",
-  wrongParent:
-    "Virhe tämän tiedoston sijainnissa! Tarkista että tiedosto on oikeassa kansiossa. Tarkista myös parentFolderID -viittaus config välilehdellä.",
+  moreThanOneSheet: (spreadSheet) =>
+    `Tiedostossa ${spreadSheet.getName()} pitäisi olla vain yksi välilehti. Tiedosto Id: ${spreadSheet.getId()}`,
+  textNotFound: (spreadSheet, sheet, cell, text) =>
+    `Could not find text: ${text} in range ${cell} in sheet ${sheet.getName()} in spreadsheet ${spreadSheet.getName()}`,
+  wrongFolder: (
+    folder,
+    parentFolder
+  ) => ` Kansioviittaukset pielessä. Tarkistettiin kansiota ${folder.getName()} id: ${folder.getId()}.
+    Kansion pitäisi olla pääkansion ${parentFolder.getName()} id: ${parentFolder.getId()} alla.
+    Projektille tai kansiolle voi olla myös merkattuna väärä pääkansio`,
+  wrongParent: (file) =>
+    `Virhe tiedoston ${file.getName()} id: ${file.getId()} sijainnissa! Tarkista että tiedosto on oikeassa kansiossa. Tarkista myös parentFolderID -viittaus config välilehdellä.`,
+  wrongSheetName: (spreadSheet, sheet) =>
+    `Välilehden ${sheet.getName()} nimi on väärä. Tiedostossa ${spreadSheet.getName()} pitäisi olla seuraava välilehti`,
   spaceQuantity: {
     namedRangeMissing:
       "Nimetty kenttä puuttuu. Tarkista että kaikki nimetyt kentät (Named Ranges) löytyy tiedostosta:\n " +

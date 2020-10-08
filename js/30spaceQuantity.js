@@ -1,7 +1,6 @@
 const addSpaceQuantityColumn = () => {
   startLog("addSpaceQuantityColumn");
   const {
-    spreadSheet,
     spaceQuantity,
     kalustesuunnitelmaObj,
     asennuslistaObj,
@@ -36,12 +35,16 @@ const addSpaceQuantityColumn = () => {
 
 const renameSpaceQuantityColumn = () => {
   startLog("renameSpaceQuantityColumn");
+
+  // TODO: rename selected SpaceQuantity column
+  // Check and identify that a spaceQuantity column is selected
+  // Popup asking for new name
+  // Update correct NAMEDRANGE on config sheet
 };
 
 const removeSpaceQuantityColumn = () => {
   startLog("removeSpaceQuantityColumn");
   const {
-    spreadSheet,
     spaceQuantity,
     kalustesuunnitelmaObj,
     asennuslistaObj,

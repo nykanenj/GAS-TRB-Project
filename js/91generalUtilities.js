@@ -121,7 +121,9 @@ const makeSheetObj = (sheetName) => {
         "Error in makeSheetObj. " + errors.spaceQuantity.namedRangeEmpty
       );
   } else {
-    Logger.log("Enum not defined for enums.NAMEDRANGES[" + sheetName + "]");
+    Logger.log(
+      "Info: Enum not defined for enums.NAMEDRANGES[" + sheetName + "]"
+    );
   }
 
   const col = headingRowToHashmap(sheetName, sheet, startRow);
@@ -217,16 +219,16 @@ const headingRowToHashmap = (sheetName, sheet, rowNum = 1) => {
   const headingRow = sheet.getRange(rowNum, 1, 1, sheet.getLastColumn());
   const headingRowArray = headingRow.getValues().join().split(",");
 
-  Logger.log(
+  /* Logger.log(
     "headingRowArray for sheet " + sheet.getName() + ": " + headingRowArray
-  );
+  ); */
   const headingHashmap = arrayToHashmap(headingRowArray);
-  Logger.log(
+  /* Logger.log(
     "headingHashmap for sheet " +
       sheet.getName() +
       ": " +
       JSON.stringify(headingHashmap)
-  );
+  ); */
   const notFoundArr = Object.values(enums[sheetName].HEADINGS).filter(
     (heading) => !headingHashmap[heading]
   );
@@ -238,16 +240,16 @@ const headingRowToHashmap = (sheetName, sheet, rowNum = 1) => {
 const headingRowToHashmapB0 = (sheet, rowNum = 1) => {
   const headingRow = sheet.getRange(rowNum, 1, 1, sheet.getLastColumn());
   const headingRowArray = headingRow.getValues().join().split(",");
-  Logger.log(
+  /* Logger.log(
     "B0 headingRowArrayB0 for sheet " + sheet.getName() + ": " + headingRowArray
-  );
+  ); */
   const headingHashmapB0 = arrayToHashmapB0(headingRowArray);
-  Logger.log(
+  /* Logger.log(
     "B0 headingHashmapB0 for sheet " +
       sheet.getName() +
       ": " +
       JSON.stringify(headingHashmapB0)
-  );
+  ); */
   return headingHashmapB0;
 };
 
@@ -286,7 +288,7 @@ const showPopup = (title, fileName, fileUrl, folderName, folderUrl) => {
     '" target="blank">' +
     folderName +
     "</a></body></html>";
-  Logger.log("html: " + html);
+  // Logger.log("html: " + html);
   let ui = HtmlService.createHtmlOutput(html);
   SpreadsheetApp.getUi().showModelessDialog(ui, title);
 };
